@@ -336,7 +336,7 @@ const Index = () => {
                           <span className="text-sm font-medium">{kickoffDays} hari</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="text-sm">Initial Test (Scanning + Manual):</span>
+                          <span className="text-sm">Initial Test (Scanning + Manual) ({pentesters[0]} pentester):</span>
                           <span className="text-sm font-medium">{initialTestCalendarDays} hari kerja = {initialTestManDays} man-days</span>
                         </div>
                         <div className="flex justify-between items-center">
@@ -371,7 +371,7 @@ const Index = () => {
                             <span className="text-sm font-medium">{patchingDays} hari</span>
                           </div>
                           <div className="flex justify-between items-center">
-                            <span className="text-sm">Retest:</span>
+                            <span className="text-sm">Retest ({pentesters[0]} pentester):</span>
                             <span className="text-sm font-medium">{retestCalendarDays} hari kerja = {retestManDays} man-days</span>
                           </div>
                           <div className="flex justify-between items-center">
@@ -396,7 +396,7 @@ const Index = () => {
                         <span className="text-xl font-bold text-primary">{totalDuration} hari kerja</span>
                       </div>
                       <div className="flex justify-between items-center mb-3">
-                        <span className="text-base font-bold">TOTAL MAN-DAY Dibayarkan:</span>
+                        <span className="text-base font-bold">TOTAL MAN-DAY Dibayarkan ({pentesters[0]} pentester):</span>
                         <span className="text-xl font-bold text-primary">{totalManDays} hari</span>
                       </div>
                       <div className="flex justify-between items-center text-sm text-muted-foreground">
