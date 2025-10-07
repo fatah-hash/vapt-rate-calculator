@@ -337,7 +337,7 @@ const Index = () => {
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-sm">Initial Test (Scanning + Manual):</span>
-                          <span className="text-sm font-medium">{initialTestCalendarDays} hari kalender = {initialTestManDays} man-days</span>
+                          <span className="text-sm font-medium">{initialTestCalendarDays} hari kerja = {initialTestManDays} man-days</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-sm text-muted-foreground ml-4">• Scanning:</span>
@@ -345,7 +345,7 @@ const Index = () => {
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-sm text-muted-foreground ml-4">• Manual Testing:</span>
-                          <span className="text-sm text-muted-foreground">{manualTestingDaysBase} hari ÷ {pentesters[0]} = {manualTestingCalendarDays} hari kalender</span>
+                          <span className="text-sm text-muted-foreground">{manualTestingDaysBase} hari ÷ {pentesters[0]} = {manualTestingCalendarDays} hari kerja</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-sm">Generate Initial Report:</span>
@@ -372,7 +372,7 @@ const Index = () => {
                           </div>
                           <div className="flex justify-between items-center">
                             <span className="text-sm">Retest:</span>
-                            <span className="text-sm font-medium">{retestCalendarDays} hari kalender = {retestManDays} man-days</span>
+                            <span className="text-sm font-medium">{retestCalendarDays} hari kerja = {retestManDays} man-days</span>
                           </div>
                           <div className="flex justify-between items-center">
                             <span className="text-sm">Generate Retest Report:</span>
@@ -393,7 +393,7 @@ const Index = () => {
                     <div className="pt-2">
                       <div className="flex justify-between items-center mb-3">
                         <span className="text-base font-bold">Durasi Pengerjaan:</span>
-                        <span className="text-xl font-bold text-primary">{totalDuration} hari kalender</span>
+                        <span className="text-xl font-bold text-primary">{totalDuration} hari kerja</span>
                       </div>
                       <div className="flex justify-between items-center mb-3">
                         <span className="text-base font-bold">TOTAL MAN-DAY Dibayarkan:</span>
