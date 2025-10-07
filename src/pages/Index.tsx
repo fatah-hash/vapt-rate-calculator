@@ -95,6 +95,15 @@ const Index = () => {
   // Total man-days
   const totalManDays = initialPhaseManDays + (retestPhaseManDays * retests[0]);
   
+  // Total duration (calendar days)
+  const totalDuration = (
+    kickoffDays +
+    initialTestCalendarDays +
+    generateInitialReportDays +
+    presentDays +
+    (retests[0] * (patchingDays + retestCalendarDays + generateRetestReportDays))
+  );
+  
   // Total cost
   const totalEstimate = totalManDays * MANDAY_RATE;
 
@@ -383,7 +392,11 @@ const Index = () => {
 
                     <div className="pt-2">
                       <div className="flex justify-between items-center mb-3">
-                        <span className="text-base font-bold">TOTAL MAN-DAYS:</span>
+                        <span className="text-base font-bold">Durasi Pengerjaan:</span>
+                        <span className="text-xl font-bold text-primary">{totalDuration} hari kalender</span>
+                      </div>
+                      <div className="flex justify-between items-center mb-3">
+                        <span className="text-base font-bold">TOTAL MAN-DAY Dibayarkan:</span>
                         <span className="text-xl font-bold text-primary">{totalManDays} hari</span>
                       </div>
                       <div className="flex justify-between items-center text-sm text-muted-foreground">
