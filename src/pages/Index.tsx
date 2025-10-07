@@ -42,11 +42,14 @@ const Index = () => {
 
   const targetCount = Object.values(targetScope).filter(Boolean).length;
 
-  // Calculate scanning days (100 endpoints = 1 day per pentester)
-  const scanningDaysPerPentester = Math.ceil(effectiveEndpoints / 100);
+  // Black Box testing has fixed days, other approaches calculate based on endpoints
+  const isBlackBox = testingApproach === "blackbox";
   
-  // Calculate manual testing days (25 endpoints max per day per pentester)
-  const manualTestingDaysPerPentester = Math.ceil(effectiveEndpoints / 25);
+  // Calculate scanning days
+  const scanningDaysPerPentester = isBlackBox ? 3 : Math.ceil(effectiveEndpoints / 100);
+  
+  // Calculate manual testing days
+  const manualTestingDaysPerPentester = isBlackBox ? 7 : Math.ceil(effectiveEndpoints / 25);
   
   // Initial test days = scanning + manual testing
   const initialTestDays = scanningDaysPerPentester + manualTestingDaysPerPentester;
@@ -246,9 +249,13 @@ const Index = () => {
                     max={500}
                     step={10}
                     className="my-4"
+                    disabled={testingApproach === "blackbox"}
                   />
                   <p className="text-sm text-muted-foreground">
-                    Rentang: 10 hingga 500 endpoint. Scanning: 100 endpoint/hari. Manual Test: 25 endpoint/hari.
+                    {testingApproach === "blackbox" 
+                      ? "Untuk Black Box testing, jumlah endpoint tidak mempengaruhi kalkulasi (fixed 10 hari: 3 scanning + 7 manual test)."
+                      : "Rentang: 10 hingga 500 endpoint. Scanning: 100 endpoint/hari. Manual Test: 25 endpoint/hari."
+                    }
                   </p>
                 </div>
 
