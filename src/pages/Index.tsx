@@ -397,7 +397,7 @@ const Index = () => {
                       </div>
                       <div className="flex justify-between items-center mb-3">
                         <span className="text-base font-bold">TOTAL MAN-DAY Dibayarkan ({pentesters[0]} pentester):</span>
-                        <span className="text-xl font-bold text-primary">{totalManDays} hari</span>
+                        <span className="text-xl font-bold text-primary">{totalManDays} hari kerja</span>
                       </div>
                       <div className="flex justify-between items-center text-sm text-muted-foreground">
                         <span>Tarif Man-day:</span>
