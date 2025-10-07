@@ -19,49 +19,64 @@ const Index = () => {
     network: false,
     server: false,
   });
-  const [testingApproach, setTestingApproach] = useState("whitebox");
+  const [testingApproach, setTestingApproach] = useState("greybox");
   const [testerLevel, setTesterLevel] = useState("basic");
-  const [endpoints, setEndpoints] = useState([10]);
+  const [endpoints, setEndpoints] = useState([100]);
+  const [pentesters, setPentesters] = useState([1]);
   const [retests, setRetests] = useState([1]);
-  const [delivery, setDelivery] = useState("normal");
 
-  // Pricing calculations
-  const BASE_PRICE_PER_ENDPOINT = 300000;
-  const RETEST_PRICE = 5000000;
+  // Pricing calculations based on man-days
+  const MANDAY_RATE = 500000; // Rp 500,000 per day
 
-  const scopeCount = Object.values(targetScope).filter(Boolean).length;
-  const scopeMultiplier = scopeCount > 0 ? scopeCount * 0.5 + 0.5 : 1;
+  const targetCount = Object.values(targetScope).filter(Boolean).length;
 
-  const approachMultipliers: { [key: string]: number } = {
-    blackbox: 1.0,
-    greybox: 1.2,
-    whitebox: 1.5,
-  };
+  // Calculate scanning days (100 endpoints = 1 day per pentester)
+  const scanningDaysPerPentester = Math.ceil(endpoints[0] / 100);
+  
+  // Calculate manual testing days (25 endpoints max per day per pentester)
+  const manualTestingDaysPerPentester = Math.ceil(endpoints[0] / 25);
+  
+  // Initial test days = scanning + manual testing
+  const initialTestDays = scanningDaysPerPentester + manualTestingDaysPerPentester;
+  
+  // Generate initial report: 1 day for 1 target, or 2 days if > 300 endpoints (per target)
+  const generateInitialReportDays = targetCount * (endpoints[0] > 300 ? 2 : 1);
+  
+  // Present: 1 day for max 5 targets
+  const presentDays = Math.ceil(targetCount / 5);
+  
+  // Patching: fixed 5 days
+  const patchingDays = 5;
+  
+  // Retest: same as initial test, but capped at 5 days if > 5
+  const retestDays = Math.min(initialTestDays, 5);
+  
+  // Generate retest report: same logic as initial report
+  const generateRetestReportDays = targetCount * (endpoints[0] > 300 ? 2 : 1);
+  
+  // Kickoff: 1 day
+  const kickoffDays = 1;
 
-  const levelMultipliers: { [key: string]: number } = {
-    basic: 1.0,
-    intermediate: 1.5,
-    expert: 2.0,
-  };
+  // Calculate total man-days for initial phase
+  const initialPhaseManDays = (
+    kickoffDays +
+    (initialTestDays * pentesters[0]) +
+    generateInitialReportDays +
+    presentDays
+  );
 
-  const baseEndpointCost = endpoints[0] * BASE_PRICE_PER_ENDPOINT;
-  const approachMultiplier = approachMultipliers[testingApproach] || 1.0;
-  const levelMultiplier = levelMultipliers[testerLevel] || 1.0;
-  const totalFactorMultiplier = scopeMultiplier * approachMultiplier * levelMultiplier;
+  // Calculate retest phase man-days (per retest)
+  const retestPhaseManDays = (
+    patchingDays +
+    (retestDays * pentesters[0]) +
+    generateRetestReportDays
+  );
 
-  const baseCostAfterFactors = Math.round(baseEndpointCost * totalFactorMultiplier);
-
-  // Volume discount
-  let volumeDiscount = 0;
-  if (endpoints[0] >= 50 && endpoints[0] < 100) {
-    volumeDiscount = baseCostAfterFactors * 0.1;
-  } else if (endpoints[0] >= 100) {
-    volumeDiscount = baseCostAfterFactors * 0.15;
-  }
-
-  const costAfterDiscount = baseCostAfterFactors - volumeDiscount;
-  const retestCost = retests[0] * RETEST_PRICE;
-  const totalEstimate = costAfterDiscount + retestCost;
+  // Total man-days
+  const totalManDays = initialPhaseManDays + (retestPhaseManDays * retests[0]);
+  
+  // Total cost
+  const totalEstimate = totalManDays * MANDAY_RATE;
 
   const formatCurrency = (amount: number) => {
     return `Rp ${amount.toLocaleString("id-ID")}`;
@@ -216,12 +231,33 @@ const Index = () => {
                     value={endpoints}
                     onValueChange={setEndpoints}
                     min={10}
-                    max={200}
-                    step={5}
+                    max={500}
+                    step={10}
                     className="my-4"
                   />
                   <p className="text-sm text-muted-foreground">
-                    Rentang: 10 hingga 200 endpoint. Biaya dasar dihitung per endpoint (Rp{BASE_PRICE_PER_ENDPOINT.toLocaleString("id-ID")}).
+                    Rentang: 10 hingga 500 endpoint. Scanning: 100 endpoint/hari. Manual Test: 25 endpoint/hari.
+                  </p>
+                </div>
+
+                {/* Number of Pentesters */}
+                <div className="mb-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <Label className="text-base font-semibold">
+                      Jumlah Pentester
+                    </Label>
+                    <span className="text-2xl font-bold text-primary">{pentesters[0]}</span>
+                  </div>
+                  <Slider
+                    value={pentesters}
+                    onValueChange={setPentesters}
+                    min={1}
+                    max={10}
+                    step={1}
+                    className="my-4"
+                  />
+                  <p className="text-sm text-muted-foreground">
+                    Jumlah pentester yang bekerja secara paralel pada fase testing.
                   </p>
                 </div>
 
@@ -242,25 +278,8 @@ const Index = () => {
                     className="my-4"
                   />
                   <p className="text-sm text-muted-foreground">
-                    Biaya tetap per retest: Rp{RETEST_PRICE.toLocaleString("id-ID")}.
+                    Setiap retest mencakup: Patching (5 hari) + Retest + Generate Report.
                   </p>
-                </div>
-
-                {/* Delivery Schedule */}
-                <div className="mb-6">
-                  <Label className="text-base font-semibold mb-3 block">
-                    Jadwal & Waktu Pengiriman
-                  </Label>
-                  <Select value={delivery} onValueChange={setDelivery}>
-                    <SelectTrigger className="w-full bg-background">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="normal">Normal Delivery</SelectItem>
-                      <SelectItem value="express">Express Delivery (+20%)</SelectItem>
-                      <SelectItem value="urgent">Urgent Delivery (+40%)</SelectItem>
-                    </SelectContent>
-                  </Select>
                 </div>
               </CardContent>
             </Card>
@@ -273,86 +292,81 @@ const Index = () => {
                 <h2 className="text-2xl font-bold text-primary mb-6">2. Hasil Estimasi</h2>
 
                 <div className="bg-secondary/30 rounded-lg p-5 mb-6">
-                  <h3 className="font-bold text-lg mb-4">Detail Perhitungan Biaya</h3>
+                  <h3 className="font-bold text-lg mb-4">Detail Iterasi & Timeline</h3>
 
                   <div className="space-y-3">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm">
-                        Biaya Endpoint Dasar
-                        <br />
-                        <span className="text-muted-foreground">({endpoints[0]} Endpoint):</span>
-                      </span>
-                      <span className="font-semibold">{formatCurrency(baseEndpointCost)}</span>
-                    </div>
-
-                    <div className="border-t border-border pt-3">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm">Target Scope:</span>
-                        <span className="text-sm font-medium">{getSelectedScopes()}</span>
-                      </div>
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm">Faktor Pendekatan Tes:</span>
-                        <span className="text-sm font-medium">{getApproachLabel(testingApproach)}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm">Faktor Level Penguji:</span>
-                        <span className="text-sm font-medium">{getLevelLabel(testerLevel)}</span>
-                      </div>
-                    </div>
-
-                    <div className="border-t border-border pt-3">
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm font-semibold">
-                          Biaya Awal (Total Faktor: {totalFactorMultiplier.toFixed(2)}x):
-                        </span>
-                        <span className="font-bold">{formatCurrency(baseCostAfterFactors)}</span>
-                      </div>
-                    </div>
-
-                    {volumeDiscount > 0 && (
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-[hsl(var(--text-highlight))]">Diskon Volume:</span>
-                        <span className="font-semibold text-[hsl(var(--text-highlight))]">
-                          - {formatCurrency(volumeDiscount)}
-                        </span>
-                      </div>
-                    )}
-
-                    {volumeDiscount === 0 && (
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-[hsl(var(--text-highlight))]">Diskon Volume:</span>
-                        <span className="font-semibold text-[hsl(var(--text-highlight))]">- Rp 0</span>
-                      </div>
-                    )}
-
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-semibold">Biaya Setelah Diskon:</span>
-                      <span className="font-bold">{formatCurrency(costAfterDiscount)}</span>
-                    </div>
-
-                    <div className="border-t border-border pt-3">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm">Delivery:</span>
-                        <span className="text-sm font-medium text-primary">
-                          {delivery === "normal" ? "Normal" : delivery === "express" ? "Express" : "Urgent"}
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm font-semibold">Biaya Proyek Utama:</span>
-                        <span className="font-bold">{formatCurrency(costAfterDiscount)}</span>
+                    <div className="border-b border-border pb-3">
+                      <h4 className="font-semibold text-sm mb-2">FASE INITIAL TEST</h4>
+                      <div className="space-y-2 ml-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm">Kickoff:</span>
+                          <span className="text-sm font-medium">{kickoffDays} hari</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm">Initial Test (Scanning + Manual):</span>
+                          <span className="text-sm font-medium">{initialTestDays} hari × {pentesters[0]} pentester</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-muted-foreground ml-4">• Scanning:</span>
+                          <span className="text-sm text-muted-foreground">{scanningDaysPerPentester} hari</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-muted-foreground ml-4">• Manual Testing:</span>
+                          <span className="text-sm text-muted-foreground">{manualTestingDaysPerPentester} hari</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm">Generate Initial Report:</span>
+                          <span className="text-sm font-medium">{generateInitialReportDays} hari ({targetCount} target{targetCount > 1 ? 's' : ''})</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm">Present:</span>
+                          <span className="text-sm font-medium">{presentDays} hari</span>
+                        </div>
+                        <div className="flex justify-between items-center font-semibold mt-2 pt-2 border-t border-border/50">
+                          <span className="text-sm">Total Man-days Initial:</span>
+                          <span className="text-sm">{initialPhaseManDays} hari</span>
+                        </div>
                       </div>
                     </div>
 
                     {retests[0] > 0 && (
-                      <div className="border-t border-border pt-3">
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm">Jumlah Retest:</span>
-                          <span className="text-sm font-bold text-[hsl(var(--text-highlight))]">
-                            {retests[0]}X
-                          </span>
+                      <div className="border-b border-border pb-3">
+                        <h4 className="font-semibold text-sm mb-2">FASE RETEST ({retests[0]}x)</h4>
+                        <div className="space-y-2 ml-2">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm">Patching:</span>
+                            <span className="text-sm font-medium">{patchingDays} hari</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm">Retest:</span>
+                            <span className="text-sm font-medium">{retestDays} hari × {pentesters[0]} pentester</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm">Generate Retest Report:</span>
+                            <span className="text-sm font-medium">{generateRetestReportDays} hari</span>
+                          </div>
+                          <div className="flex justify-between items-center font-semibold mt-2 pt-2 border-t border-border/50">
+                            <span className="text-sm">Man-days per Retest:</span>
+                            <span className="text-sm">{retestPhaseManDays} hari</span>
+                          </div>
+                          <div className="flex justify-between items-center font-semibold">
+                            <span className="text-sm">Total Man-days Retest:</span>
+                            <span className="text-sm">{retestPhaseManDays * retests[0]} hari</span>
+                          </div>
                         </div>
                       </div>
                     )}
+
+                    <div className="pt-2">
+                      <div className="flex justify-between items-center mb-3">
+                        <span className="text-base font-bold">TOTAL MAN-DAYS:</span>
+                        <span className="text-xl font-bold text-primary">{totalManDays} hari</span>
+                      </div>
+                      <div className="flex justify-between items-center text-sm text-muted-foreground">
+                        <span>Tarif Man-day:</span>
+                        <span>{formatCurrency(MANDAY_RATE)}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
