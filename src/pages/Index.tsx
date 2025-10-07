@@ -39,9 +39,9 @@ const Index = () => {
     const deviceCount = endpoints[0];
     let sizeCategory: "kecil" | "sedang" | "besar";
     
-    if (deviceCount <= 85) {
+    if (deviceCount <= 50) {
       sizeCategory = "kecil";
-    } else if (deviceCount <= 170) {
+    } else if (deviceCount <= 150) {
       sizeCategory = "sedang";
     } else {
       sizeCategory = "besar";
