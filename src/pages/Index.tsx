@@ -25,24 +25,65 @@ const Index = () => {
 
   const MANDAY_RATE = getManDayRate(testerLevel);
 
-  // Minimum endpoint calculation: below 50 endpoints = treated as 50 endpoints
-  // White Box testing multiplies endpoints by 2
-  const baseEndpoints = Math.max(endpoints[0], 50);
-  const effectiveEndpoints = testingApproach === "whitebox" ? baseEndpoints * 2 : baseEndpoints;
-
   const targetCount = 1; // Always 1 since only one scope can be selected
 
-  // Black Box testing has fixed days, other approaches calculate based on endpoints
-  const isBlackBox = testingApproach === "blackbox";
-  
-  // Calculate scanning days (increases with more pentesters)
-  const scanningDaysPerPentester = isBlackBox ? 3 : Math.ceil(effectiveEndpoints / 100);
-  const scanningManDays = scanningDaysPerPentester * pentesters[0];
-  
-  // Calculate manual testing days (decreases when divided among pentesters)
-  const manualTestingDaysBase = isBlackBox ? 7 : Math.ceil(effectiveEndpoints / 25);
-  const manualTestingCalendarDays = Math.ceil(manualTestingDaysBase / pentesters[0]);
-  const manualTestingManDays = manualTestingDaysBase;
+  // Network scope calculations using reference table
+  let scanningManDays: number;
+  let manualTestingManDays: number;
+  let scanningDaysPerPentester: number;
+  let manualTestingCalendarDays: number;
+  let effectiveEndpoints: number;
+
+  if (targetScope === "network") {
+    // Determine size category based on device count
+    const deviceCount = endpoints[0];
+    let sizeCategory: "kecil" | "sedang" | "besar";
+    
+    if (deviceCount <= 85) {
+      sizeCategory = "kecil";
+    } else if (deviceCount <= 170) {
+      sizeCategory = "sedang";
+    } else {
+      sizeCategory = "besar";
+    }
+
+    // Man-days table for network testing
+    const networkManDaysTable = {
+      blackbox: { kecil: 9, sedang: 16, besar: 25 },
+      greybox: { kecil: 7, sedang: 12, besar: 18 },
+      whitebox: { kecil: 4, sedang: 8, besar: 13 }
+    };
+
+    const totalManDays = networkManDaysTable[testingApproach as keyof typeof networkManDaysTable][sizeCategory];
+    
+    // Split: 1/4 for scanning, 3/4 for manual testing
+    scanningManDays = Math.ceil(totalManDays * 0.25);
+    manualTestingManDays = Math.ceil(totalManDays * 0.75);
+    
+    // Calculate calendar days
+    scanningDaysPerPentester = Math.ceil(scanningManDays / pentesters[0]);
+    manualTestingCalendarDays = Math.ceil(manualTestingManDays / pentesters[0]);
+    
+    effectiveEndpoints = deviceCount;
+  } else {
+    // Web/Mobile/Server scope calculations (existing logic)
+    // Minimum endpoint calculation: below 50 endpoints = treated as 50 endpoints
+    // White Box testing multiplies endpoints by 2
+    const baseEndpoints = Math.max(endpoints[0], 50);
+    effectiveEndpoints = testingApproach === "whitebox" ? baseEndpoints * 2 : baseEndpoints;
+
+    // Black Box testing has fixed days, other approaches calculate based on endpoints
+    const isBlackBox = testingApproach === "blackbox";
+    
+    // Calculate scanning days (increases with more pentesters)
+    scanningDaysPerPentester = isBlackBox ? 3 : Math.ceil(effectiveEndpoints / 100);
+    scanningManDays = scanningDaysPerPentester * pentesters[0];
+    
+    // Calculate manual testing days (decreases when divided among pentesters)
+    const manualTestingDaysBase = isBlackBox ? 7 : Math.ceil(effectiveEndpoints / 25);
+    manualTestingCalendarDays = Math.ceil(manualTestingDaysBase / pentesters[0]);
+    manualTestingManDays = manualTestingDaysBase;
+  }
   
   // Initial test days and man-days
   const initialTestCalendarDays = scanningDaysPerPentester + manualTestingCalendarDays;
@@ -322,7 +363,7 @@ const Index = () => {
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-sm text-muted-foreground ml-4">• Manual Testing:</span>
-                          <span className="text-sm text-muted-foreground">{manualTestingDaysBase} hari ÷ {pentesters[0]} = {manualTestingCalendarDays} hari kerja</span>
+                          <span className="text-sm text-muted-foreground">{manualTestingManDays} man-days ÷ {pentesters[0]} = {manualTestingCalendarDays} hari kerja</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-sm">Generate Initial Report:</span>
