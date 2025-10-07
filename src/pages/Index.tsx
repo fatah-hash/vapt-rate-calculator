@@ -1,24 +1,12 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 
-interface TargetScope {
-  web: boolean;
-  mobile: boolean;
-  network: boolean;
-  server: boolean;
-}
-
 const Index = () => {
-  const [targetScope, setTargetScope] = useState<TargetScope>({
-    web: true,
-    mobile: false,
-    network: false,
-    server: false,
-  });
+  const [targetScope, setTargetScope] = useState<string>("web");
   const [testingApproach, setTestingApproach] = useState("greybox");
   const [testerLevel, setTesterLevel] = useState("basic");
   const [endpoints, setEndpoints] = useState([100]);
@@ -42,7 +30,7 @@ const Index = () => {
   const baseEndpoints = Math.max(endpoints[0], 50);
   const effectiveEndpoints = testingApproach === "whitebox" ? baseEndpoints * 2 : baseEndpoints;
 
-  const targetCount = Object.values(targetScope).filter(Boolean).length;
+  const targetCount = 1; // Always 1 since only one scope can be selected
 
   // Black Box testing has fixed days, other approaches calculate based on endpoints
   const isBlackBox = testingApproach === "blackbox";
@@ -114,12 +102,13 @@ const Index = () => {
   };
 
   const getSelectedScopes = () => {
-    const scopes = [];
-    if (targetScope.web) scopes.push("Web");
-    if (targetScope.mobile) scopes.push("Mobile");
-    if (targetScope.network) scopes.push("Network");
-    if (targetScope.server) scopes.push("Server/Cloud");
-    return scopes.join(", ") || "-";
+    const scopes: { [key: string]: string } = {
+      web: "Web Application",
+      mobile: "Mobile App",
+      network: "Network Infrastructure",
+      server: "Server/Cloud Configuration",
+    };
+    return scopes[targetScope] || "-";
   };
 
   const getApproachLabel = (approach: string) => {
@@ -162,58 +151,36 @@ const Index = () => {
                 {/* Target Scope */}
                 <div className="mb-6">
                   <Label className="text-base font-semibold mb-3 block">
-                    Target Scope (Lingkup Target) - Pilih Satu atau Lebih
+                    Target Scope (Lingkup Target) - Pilih Satu
                   </Label>
-                  <div className="space-y-3">
-                    <div className="flex items-center space-x-3">
-                      <Checkbox
-                        id="web"
-                        checked={targetScope.web}
-                        onCheckedChange={(checked) =>
-                          setTargetScope({ ...targetScope, web: checked as boolean })
-                        }
-                      />
-                      <label htmlFor="web" className="text-sm cursor-pointer">
-                        Web Application (Aplikasi Web)
-                      </label>
+                  <RadioGroup value={targetScope} onValueChange={setTargetScope}>
+                    <div className="space-y-3">
+                      <div className="flex items-center space-x-3">
+                        <RadioGroupItem value="web" id="web" />
+                        <label htmlFor="web" className="text-sm cursor-pointer">
+                          Web Application (Aplikasi Web)
+                        </label>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <RadioGroupItem value="mobile" id="mobile" />
+                        <label htmlFor="mobile" className="text-sm cursor-pointer">
+                          Mobile App (Aplikasi Seluler)
+                        </label>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <RadioGroupItem value="network" id="network" />
+                        <label htmlFor="network" className="text-sm cursor-pointer">
+                          Network Infrastructure (Infrastruktur Jaringan)
+                        </label>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <RadioGroupItem value="server" id="server" />
+                        <label htmlFor="server" className="text-sm cursor-pointer">
+                          Server/Cloud Configuration (Konfigurasi Server/Cloud)
+                        </label>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-3">
-                      <Checkbox
-                        id="mobile"
-                        checked={targetScope.mobile}
-                        onCheckedChange={(checked) =>
-                          setTargetScope({ ...targetScope, mobile: checked as boolean })
-                        }
-                      />
-                      <label htmlFor="mobile" className="text-sm cursor-pointer">
-                        Mobile App (Aplikasi Seluler)
-                      </label>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <Checkbox
-                        id="network"
-                        checked={targetScope.network}
-                        onCheckedChange={(checked) =>
-                          setTargetScope({ ...targetScope, network: checked as boolean })
-                        }
-                      />
-                      <label htmlFor="network" className="text-sm cursor-pointer">
-                        Network Infrastructure (Infrastruktur Jaringan)
-                      </label>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <Checkbox
-                        id="server"
-                        checked={targetScope.server}
-                        onCheckedChange={(checked) =>
-                          setTargetScope({ ...targetScope, server: checked as boolean })
-                        }
-                      />
-                      <label htmlFor="server" className="text-sm cursor-pointer">
-                        Server/Cloud Configuration (Konfigurasi Server/Cloud)
-                      </label>
-                    </div>
-                  </div>
+                  </RadioGroup>
                 </div>
 
                 {/* Testing Approach */}
@@ -250,11 +217,14 @@ const Index = () => {
                   </Select>
                 </div>
 
-                {/* Number of Endpoints */}
+                {/* Number of Endpoints / Devices */}
                 <div className="mb-6">
                   <div className="flex justify-between items-center mb-2">
                     <Label className="text-base font-semibold">
-                      Jumlah Halaman / Endpoint
+                      {targetScope === "network" 
+                        ? "Jumlah Device pada Satu Segmen IP" 
+                        : "Jumlah Halaman / Endpoint"
+                      }
                     </Label>
                     <span className="text-2xl font-bold text-primary">{endpoints[0]}</span>
                   </div>
@@ -268,10 +238,15 @@ const Index = () => {
                     disabled={testingApproach === "blackbox"}
                   />
                   <p className="text-sm text-muted-foreground">
-                    {testingApproach === "blackbox" 
-                      ? "Untuk Black Box testing, jumlah endpoint tidak mempengaruhi kalkulasi (fixed 10 hari: 3 scanning + 7 manual test)."
-                      : "Rentang: 10 hingga 500 endpoint. Scanning: 100 endpoint/hari. Manual Test: 25 endpoint/hari."
-                    }
+                    {targetScope === "network" ? (
+                      testingApproach === "blackbox"
+                        ? "Untuk Black Box testing, jumlah device tidak mempengaruhi kalkulasi (fixed 10 hari: 3 scanning + 7 manual test)."
+                        : "Rentang: 10 hingga 500 device. Scanning: 100 device/hari. Manual Test: 25 device/hari."
+                    ) : (
+                      testingApproach === "blackbox" 
+                        ? "Untuk Black Box testing, jumlah endpoint tidak mempengaruhi kalkulasi (fixed 10 hari: 3 scanning + 7 manual test)."
+                        : "Rentang: 10 hingga 500 endpoint. Scanning: 100 endpoint/hari. Manual Test: 25 endpoint/hari."
+                    )}
                   </p>
                 </div>
 
