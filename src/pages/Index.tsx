@@ -26,7 +26,7 @@ const Index = () => {
   const [retests, setRetests] = useState([1]);
 
   // Pricing calculations based on man-days
-  const MANDAY_RATE = 500000; // Rp 500,000 per day
+  const MANDAY_RATE = 1500000; // Rp 1,500,000 per day
 
   const targetCount = Object.values(targetScope).filter(Boolean).length;
 
