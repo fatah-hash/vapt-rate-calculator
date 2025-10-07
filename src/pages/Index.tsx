@@ -72,18 +72,10 @@ const Index = () => {
   // Kickoff: 1 day
   const kickoffDays = 1;
 
-  // Calendar days calculation (divided by number of pentesters working in parallel)
-  const calendarDaysForInitialTest = Math.ceil(initialTestDays / pentesters[0]);
-  const calendarDaysForRetest = Math.ceil(retestDays / pentesters[0]);
-
   // Calculate total man-days for initial phase
-  // Man-days = calendar days × number of people working
-  const initialTestManDays = initialTestDays * pentesters[0];
-  const retestManDays = retestDays * pentesters[0];
-  
   const initialPhaseManDays = (
     kickoffDays +
-    initialTestManDays +
+    (initialTestDays * pentesters[0]) +
     generateInitialReportDays +
     presentDays
   );
@@ -91,7 +83,7 @@ const Index = () => {
   // Calculate retest phase man-days (per retest)
   const retestPhaseManDays = (
     patchingDays +
-    retestManDays +
+    (retestDays * pentesters[0]) +
     generateRetestReportDays
   );
 
@@ -330,15 +322,15 @@ const Index = () => {
                           <span className="text-sm font-medium">{kickoffDays} hari</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="text-sm">Initial Test:</span>
-                          <span className="text-sm font-medium">{calendarDaysForInitialTest} hari kalender × {pentesters[0]} pentester = {initialTestManDays} man-days</span>
+                          <span className="text-sm">Initial Test (Scanning + Manual):</span>
+                          <span className="text-sm font-medium">{initialTestDays} hari × {pentesters[0]} pentester</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="text-sm text-muted-foreground ml-4">• Scanning per pentester:</span>
+                          <span className="text-sm text-muted-foreground ml-4">• Scanning:</span>
                           <span className="text-sm text-muted-foreground">{scanningDaysPerPentester} hari</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="text-sm text-muted-foreground ml-4">• Manual Testing per pentester:</span>
+                          <span className="text-sm text-muted-foreground ml-4">• Manual Testing:</span>
                           <span className="text-sm text-muted-foreground">{manualTestingDaysPerPentester} hari</span>
                         </div>
                         <div className="flex justify-between items-center">
@@ -366,7 +358,7 @@ const Index = () => {
                           </div>
                           <div className="flex justify-between items-center">
                             <span className="text-sm">Retest:</span>
-                            <span className="text-sm font-medium">{calendarDaysForRetest} hari kalender × {pentesters[0]} pentester = {retestManDays} man-days</span>
+                            <span className="text-sm font-medium">{retestDays} hari × {pentesters[0]} pentester</span>
                           </div>
                           <div className="flex justify-between items-center">
                             <span className="text-sm">Generate Retest Report:</span>
