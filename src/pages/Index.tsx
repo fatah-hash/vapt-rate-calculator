@@ -248,7 +248,7 @@ const Index = () => {
                     min={10}
                     max={500}
                     step={10}
-                    className="my-4"
+                    className={`my-4 ${testingApproach === "blackbox" ? "opacity-50 cursor-not-allowed" : ""}`}
                     disabled={testingApproach === "blackbox"}
                   />
                   <p className="text-sm text-muted-foreground">
