@@ -27,7 +27,6 @@ const Index = () => {
 
   // Pricing calculations based on man-days
   const MANDAY_RATE = 500000; // Rp 500,000 per day
-  const GPM_MULTIPLIER = 1.70; // 70% Gross Profit Margin
 
   const targetCount = Object.values(targetScope).filter(Boolean).length;
 
@@ -76,8 +75,8 @@ const Index = () => {
   // Total man-days
   const totalManDays = initialPhaseManDays + (retestPhaseManDays * retests[0]);
   
-  // Total cost with GPM
-  const totalEstimate = totalManDays * MANDAY_RATE * GPM_MULTIPLIER;
+  // Total cost
+  const totalEstimate = totalManDays * MANDAY_RATE;
 
   const formatCurrency = (amount: number) => {
     return `Rp ${amount.toLocaleString("id-ID")}`;
