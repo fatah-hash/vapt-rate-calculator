@@ -25,8 +25,17 @@ const Index = () => {
   const [pentesters, setPentesters] = useState([1]);
   const [retests, setRetests] = useState([1]);
 
-  // Pricing calculations based on man-days
-  const MANDAY_RATE = 1500000; // Rp 1,500,000 per day
+  // Pricing calculations based on man-days - varies by tester level
+  const getManDayRate = (level: string) => {
+    const rates: { [key: string]: number } = {
+      basic: 1250000,       // Rp 1,250,000 per day
+      intermediate: 1500000, // Rp 1,500,000 per day
+      expert: 2000000,       // Rp 2,000,000 per day
+    };
+    return rates[level] || 1500000;
+  };
+
+  const MANDAY_RATE = getManDayRate(testerLevel);
 
   // Minimum endpoint calculation: below 50 endpoints = treated as 50 endpoints
   const effectiveEndpoints = Math.max(endpoints[0], 50);
