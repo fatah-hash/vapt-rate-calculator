@@ -28,19 +28,22 @@ const Index = () => {
   // Pricing calculations based on man-days
   const MANDAY_RATE = 1500000; // Rp 1,500,000 per day
 
+  // Minimum endpoint calculation: below 50 endpoints = treated as 50 endpoints
+  const effectiveEndpoints = Math.max(endpoints[0], 50);
+
   const targetCount = Object.values(targetScope).filter(Boolean).length;
 
   // Calculate scanning days (100 endpoints = 1 day per pentester)
-  const scanningDaysPerPentester = Math.ceil(endpoints[0] / 100);
+  const scanningDaysPerPentester = Math.ceil(effectiveEndpoints / 100);
   
   // Calculate manual testing days (25 endpoints max per day per pentester)
-  const manualTestingDaysPerPentester = Math.ceil(endpoints[0] / 25);
+  const manualTestingDaysPerPentester = Math.ceil(effectiveEndpoints / 25);
   
   // Initial test days = scanning + manual testing
   const initialTestDays = scanningDaysPerPentester + manualTestingDaysPerPentester;
   
   // Generate initial report: 1 day for 1 target, or 2 days if > 300 endpoints (per target)
-  const generateInitialReportDays = targetCount * (endpoints[0] > 300 ? 2 : 1);
+  const generateInitialReportDays = targetCount * (effectiveEndpoints > 300 ? 2 : 1);
   
   // Present: 1 day for max 5 targets
   const presentDays = Math.ceil(targetCount / 5);
@@ -52,7 +55,7 @@ const Index = () => {
   const retestDays = Math.min(initialTestDays, 5);
   
   // Generate retest report: same logic as initial report
-  const generateRetestReportDays = targetCount * (endpoints[0] > 300 ? 2 : 1);
+  const generateRetestReportDays = targetCount * (effectiveEndpoints > 300 ? 2 : 1);
   
   // Kickoff: 1 day
   const kickoffDays = 1;
