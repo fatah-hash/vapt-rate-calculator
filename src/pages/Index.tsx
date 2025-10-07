@@ -45,14 +45,18 @@ const Index = () => {
   // Black Box testing has fixed days, other approaches calculate based on endpoints
   const isBlackBox = testingApproach === "blackbox";
   
-  // Calculate scanning days
+  // Calculate scanning days (increases with more pentesters)
   const scanningDaysPerPentester = isBlackBox ? 3 : Math.ceil(effectiveEndpoints / 100);
+  const scanningManDays = scanningDaysPerPentester * pentesters[0];
   
-  // Calculate manual testing days
-  const manualTestingDaysPerPentester = isBlackBox ? 7 : Math.ceil(effectiveEndpoints / 25);
+  // Calculate manual testing days (decreases when divided among pentesters)
+  const manualTestingDaysBase = isBlackBox ? 7 : Math.ceil(effectiveEndpoints / 25);
+  const manualTestingCalendarDays = Math.ceil(manualTestingDaysBase / pentesters[0]);
+  const manualTestingManDays = manualTestingDaysBase;
   
-  // Initial test days = scanning + manual testing
-  const initialTestDays = scanningDaysPerPentester + manualTestingDaysPerPentester;
+  // Initial test days and man-days
+  const initialTestCalendarDays = scanningDaysPerPentester + manualTestingCalendarDays;
+  const initialTestManDays = scanningManDays + manualTestingManDays;
   
   // Generate initial report: 1 day for 1 target, or 2 days if > 300 endpoints (per target)
   const generateInitialReportDays = targetCount * (effectiveEndpoints > 300 ? 2 : 1);
@@ -63,8 +67,9 @@ const Index = () => {
   // Patching: fixed 5 days
   const patchingDays = 5;
   
-  // Retest: same as initial test, but capped at 5 days if > 5
-  const retestDays = Math.min(initialTestDays, 5);
+  // Retest: same logic as initial test, but capped at 5 calendar days if > 5
+  const retestCalendarDays = Math.min(initialTestCalendarDays, 5);
+  const retestManDays = Math.min(initialTestManDays, 5 * pentesters[0]);
   
   // Generate retest report: same logic as initial report
   const generateRetestReportDays = targetCount * (effectiveEndpoints > 300 ? 2 : 1);
@@ -75,7 +80,7 @@ const Index = () => {
   // Calculate total man-days for initial phase
   const initialPhaseManDays = (
     kickoffDays +
-    (initialTestDays * pentesters[0]) +
+    initialTestManDays +
     generateInitialReportDays +
     presentDays
   );
@@ -83,7 +88,7 @@ const Index = () => {
   // Calculate retest phase man-days (per retest)
   const retestPhaseManDays = (
     patchingDays +
-    (retestDays * pentesters[0]) +
+    retestManDays +
     generateRetestReportDays
   );
 
@@ -323,15 +328,15 @@ const Index = () => {
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-sm">Initial Test (Scanning + Manual):</span>
-                          <span className="text-sm font-medium">{initialTestDays} hari × {pentesters[0]} pentester</span>
+                          <span className="text-sm font-medium">{initialTestCalendarDays} hari kalender = {initialTestManDays} man-days</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-sm text-muted-foreground ml-4">• Scanning:</span>
-                          <span className="text-sm text-muted-foreground">{scanningDaysPerPentester} hari</span>
+                          <span className="text-sm text-muted-foreground">{scanningDaysPerPentester} hari × {pentesters[0]} = {scanningManDays} man-days</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-sm text-muted-foreground ml-4">• Manual Testing:</span>
-                          <span className="text-sm text-muted-foreground">{manualTestingDaysPerPentester} hari</span>
+                          <span className="text-sm text-muted-foreground">{manualTestingDaysBase} hari ÷ {pentesters[0]} = {manualTestingCalendarDays} hari kalender</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-sm">Generate Initial Report:</span>
@@ -358,7 +363,7 @@ const Index = () => {
                           </div>
                           <div className="flex justify-between items-center">
                             <span className="text-sm">Retest:</span>
-                            <span className="text-sm font-medium">{retestDays} hari × {pentesters[0]} pentester</span>
+                            <span className="text-sm font-medium">{retestCalendarDays} hari kalender = {retestManDays} man-days</span>
                           </div>
                           <div className="flex justify-between items-center">
                             <span className="text-sm">Generate Retest Report:</span>
