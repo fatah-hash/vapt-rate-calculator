@@ -38,7 +38,9 @@ const Index = () => {
   const MANDAY_RATE = getManDayRate(testerLevel);
 
   // Minimum endpoint calculation: below 50 endpoints = treated as 50 endpoints
-  const effectiveEndpoints = Math.max(endpoints[0], 50);
+  // White Box testing multiplies endpoints by 2
+  const baseEndpoints = Math.max(endpoints[0], 50);
+  const effectiveEndpoints = testingApproach === "whitebox" ? baseEndpoints * 2 : baseEndpoints;
 
   const targetCount = Object.values(targetScope).filter(Boolean).length;
 
