@@ -381,15 +381,30 @@ const Index = () => {
                         </div>
                         <div className="flex justify-between items-center gap-2">
                           <span className="text-xs sm:text-sm">Initial Test ({pentesters[0]} pentester):</span>
-                          <span className="text-xs sm:text-sm font-medium whitespace-nowrap">{initialTestCalendarDays} hari × {pentesters[0]} Pentester = {initialTestManDays} hari</span>
+                          <span className="text-xs sm:text-sm font-medium whitespace-nowrap">
+                            {targetScope === "network" 
+                              ? `${initialTestCalendarDays} hari (${initialTestManDays} man-days)`
+                              : `${initialTestCalendarDays} hari × ${pentesters[0]} Pentester = ${initialTestManDays} hari`
+                            }
+                          </span>
                         </div>
                         <div className="flex justify-between items-center gap-2">
                           <span className="text-xs sm:text-sm text-muted-foreground ml-2 sm:ml-4">• Scanning:</span>
-                          <span className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">{scanningDaysPerPentester} × {pentesters[0]} = {scanningManDays} hari</span>
+                          <span className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
+                            {targetScope === "network"
+                              ? `${scanningDaysPerPentester} hari × ${pentesters[0]} pentester = ${scanningManDays} hari`
+                              : `${scanningDaysPerPentester} × ${pentesters[0]} = ${scanningManDays} hari`
+                            }
+                          </span>
                         </div>
                         <div className="flex justify-between items-center gap-2">
                           <span className="text-xs sm:text-sm text-muted-foreground ml-2 sm:ml-4">• Manual Testing:</span>
-                          <span className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">{manualTestingManDays} ÷ {pentesters[0]} = {manualTestingCalendarDays} hari</span>
+                          <span className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
+                            {targetScope === "network"
+                              ? `${manualTestingManDays} hari ÷ ${pentesters[0]} pentester = ${manualTestingCalendarDays} hari`
+                              : `${manualTestingManDays} ÷ ${pentesters[0]} = ${manualTestingCalendarDays} hari`
+                            }
+                          </span>
                         </div>
                         <div className="flex justify-between items-center gap-2">
                           <span className="text-xs sm:text-sm">Generate Report:</span>
