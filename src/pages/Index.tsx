@@ -51,6 +51,30 @@ const Index = () => {
     manualTestingCalendarDays = Math.ceil(manualTestingDaysBase / pentesters[0]);
     
     effectiveEndpoints = deviceCount;
+  } else if (targetScope === "server") {
+    // Server/Cloud Configuration scope - fixed days per testing approach
+    // Always 1 server
+    effectiveEndpoints = 1;
+    
+    // Fixed days based on testing approach
+    if (testingApproach === "whitebox") {
+      scanningDaysPerPentester = 1;
+      const manualTestingDaysBase = 4;
+      manualTestingManDays = manualTestingDaysBase;
+      manualTestingCalendarDays = Math.ceil(manualTestingDaysBase / pentesters[0]);
+    } else if (testingApproach === "greybox") {
+      scanningDaysPerPentester = 2;
+      const manualTestingDaysBase = 6;
+      manualTestingManDays = manualTestingDaysBase;
+      manualTestingCalendarDays = Math.ceil(manualTestingDaysBase / pentesters[0]);
+    } else { // blackbox
+      scanningDaysPerPentester = 2;
+      const manualTestingDaysBase = 8;
+      manualTestingManDays = manualTestingDaysBase;
+      manualTestingCalendarDays = Math.ceil(manualTestingDaysBase / pentesters[0]);
+    }
+    
+    scanningManDays = scanningDaysPerPentester * pentesters[0];
   } else {
     // Web/Mobile/Server scope calculations (existing logic)
     // Minimum endpoint calculation: below 50 endpoints = treated as 50 endpoints
@@ -245,35 +269,53 @@ const Index = () => {
                 </div>
 
                 {/* Number of Endpoints / Devices */}
-                <div className="mb-6">
-                  <div className="flex justify-between items-center mb-2">
-                    <Label className="text-base font-semibold">
-                      {targetScope === "network" 
-                        ? "Jumlah Device pada Satu Segmen IP" 
-                        : "Jumlah Halaman / Endpoint"
-                      }
-                    </Label>
-                    <span className="text-2xl font-bold text-primary">{endpoints[0]}</span>
+                {targetScope !== "server" && (
+                  <div className="mb-6">
+                    <div className="flex justify-between items-center mb-2">
+                      <Label className="text-base font-semibold">
+                        {targetScope === "network" 
+                          ? "Jumlah Device pada Satu Segmen IP" 
+                          : "Jumlah Halaman / Endpoint"
+                        }
+                      </Label>
+                      <span className="text-2xl font-bold text-primary">{endpoints[0]}</span>
+                    </div>
+                    <Slider
+                      value={endpoints}
+                      onValueChange={setEndpoints}
+                      min={10}
+                      max={targetScope === "network" ? 255 : 500}
+                      step={10}
+                      className={`my-4 ${testingApproach === "blackbox" && targetScope !== "network" ? "opacity-50 cursor-not-allowed" : ""}`}
+                      disabled={testingApproach === "blackbox" && targetScope !== "network"}
+                    />
+                    <p className="text-sm text-muted-foreground">
+                      {targetScope === "network" ? (
+                        "Rentang: 10 hingga 255 device (maksimal dalam satu segmen IP/24). Scanning: 255 device/hari/pentester. Manual Test: 20 device/hari/pentester."
+                      ) : (
+                        testingApproach === "blackbox" 
+                          ? "Untuk Black Box testing, jumlah endpoint tidak mempengaruhi kalkulasi (fixed 10 hari: 3 scanning + 7 manual test)."
+                          : "Rentang: 10 hingga 500 endpoint. Scanning: 100 endpoint/hari/pentester. Manual Test: 25 endpoint/hari/pentester."
+                      )}
+                    </p>
                   </div>
-                  <Slider
-                    value={endpoints}
-                    onValueChange={setEndpoints}
-                    min={10}
-                    max={targetScope === "network" ? 255 : 500}
-                    step={10}
-                    className={`my-4 ${testingApproach === "blackbox" && targetScope !== "network" ? "opacity-50 cursor-not-allowed" : ""}`}
-                    disabled={testingApproach === "blackbox" && targetScope !== "network"}
-                  />
-                  <p className="text-sm text-muted-foreground">
-                    {targetScope === "network" ? (
-                      "Rentang: 10 hingga 255 device (maksimal dalam satu segmen IP/24). Scanning: 255 device/hari/pentester. Manual Test: 20 device/hari/pentester."
-                    ) : (
-                      testingApproach === "blackbox" 
-                        ? "Untuk Black Box testing, jumlah endpoint tidak mempengaruhi kalkulasi (fixed 10 hari: 3 scanning + 7 manual test)."
-                        : "Rentang: 10 hingga 500 endpoint. Scanning: 100 endpoint/hari/pentester. Manual Test: 25 endpoint/hari/pentester."
-                    )}
-                  </p>
-                </div>
+                )}
+
+                {targetScope === "server" && (
+                  <div className="mb-6">
+                    <Label className="text-base font-semibold mb-3 block">
+                      Jumlah Server
+                    </Label>
+                    <div className="bg-secondary/30 rounded-lg p-4">
+                      <p className="text-sm">Default: <span className="font-bold text-primary">1 Server</span></p>
+                      <p className="text-xs text-muted-foreground mt-2">
+                        White box: 1 hari scanning + 4 hari manual test<br />
+                        Grey box: 2 hari scanning + 6 hari manual test<br />
+                        Black box: 2 hari scanning + 8 hari manual test
+                      </p>
+                    </div>
+                  </div>
+                )}
 
                 {/* Number of Pentesters */}
                 <div className="mb-6">
