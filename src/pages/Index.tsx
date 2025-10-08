@@ -181,52 +181,52 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[hsl(var(--calculator-bg))] py-8 px-4">
+    <div className="min-h-screen bg-[hsl(var(--calculator-bg))] py-4 sm:py-6 md:py-8 px-3 sm:px-4 md:px-6">
       <div className="max-w-7xl mx-auto">
-        <header className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-3">
+        <header className="mb-6 sm:mb-8 animate-fade-in">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-2 sm:mb-3">
             Kalkulator Harga Penetration Testing
           </h1>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-sm sm:text-base md:text-lg">
             Hitung estimasi biaya pengujian berdasarkan scope, pendekatan, level penguji, retest, dan timeline dalam Rupiah (IDR).
           </p>
         </header>
 
-        <div className="grid lg:grid-cols-2 gap-6">
+        <div className="grid lg:grid-cols-2 gap-4 sm:gap-6">
           {/* Left Column - Project Details */}
-          <div className="space-y-6">
-            <Card className="bg-[hsl(var(--calculator-section))] border-border h-full">
-              <CardContent className="pt-6">
-                <h2 className="text-2xl font-bold text-primary mb-6">1. Detail Proyek</h2>
+          <div className="space-y-4 sm:space-y-6 animate-fade-in">
+            <Card className="bg-[hsl(var(--calculator-section))] border-border lg:h-full transition-all duration-300 hover:shadow-lg">
+              <CardContent className="pt-4 sm:pt-6 px-4 sm:px-6">
+                <h2 className="text-xl sm:text-2xl font-bold text-primary mb-4 sm:mb-6">1. Detail Proyek</h2>
 
                 {/* Target Scope */}
-                <div className="mb-6">
-                  <Label className="text-base font-semibold mb-3 block">
+                <div className="mb-4 sm:mb-6">
+                  <Label className="text-sm sm:text-base font-semibold mb-2 sm:mb-3 block">
                     Target Scope (Lingkup Target) - Pilih Satu
                   </Label>
                   <RadioGroup value={targetScope} onValueChange={setTargetScope}>
-                    <div className="space-y-3">
-                      <div className="flex items-center space-x-3">
+                    <div className="space-y-2 sm:space-y-3">
+                      <div className="flex items-center space-x-2 sm:space-x-3 transition-all hover:bg-secondary/30 p-2 rounded-lg">
                         <RadioGroupItem value="web" id="web" />
-                        <label htmlFor="web" className="text-sm cursor-pointer">
+                        <label htmlFor="web" className="text-xs sm:text-sm cursor-pointer flex-1">
                           Web Application (Aplikasi Web)
                         </label>
                       </div>
-                      <div className="flex items-center space-x-3">
+                      <div className="flex items-center space-x-2 sm:space-x-3 transition-all hover:bg-secondary/30 p-2 rounded-lg">
                         <RadioGroupItem value="mobile" id="mobile" />
-                        <label htmlFor="mobile" className="text-sm cursor-pointer">
+                        <label htmlFor="mobile" className="text-xs sm:text-sm cursor-pointer flex-1">
                           Mobile App (Aplikasi Seluler)
                         </label>
                       </div>
-                      <div className="flex items-center space-x-3">
+                      <div className="flex items-center space-x-2 sm:space-x-3 transition-all hover:bg-secondary/30 p-2 rounded-lg">
                         <RadioGroupItem value="network" id="network" />
-                        <label htmlFor="network" className="text-sm cursor-pointer">
+                        <label htmlFor="network" className="text-xs sm:text-sm cursor-pointer flex-1">
                           Network Infrastructure (Infrastruktur Jaringan)
                         </label>
                       </div>
-                      <div className="flex items-center space-x-3">
+                      <div className="flex items-center space-x-2 sm:space-x-3 transition-all hover:bg-secondary/30 p-2 rounded-lg">
                         <RadioGroupItem value="server" id="server" />
-                        <label htmlFor="server" className="text-sm cursor-pointer">
+                        <label htmlFor="server" className="text-xs sm:text-sm cursor-pointer flex-1">
                           Server/Cloud Configuration (Konfigurasi Server/Cloud)
                         </label>
                       </div>
@@ -235,50 +235,50 @@ const Index = () => {
                 </div>
 
                 {/* Testing Approach */}
-                <div className="mb-6">
-                  <Label className="text-base font-semibold mb-3 block">
+                <div className="mb-4 sm:mb-6">
+                  <Label className="text-sm sm:text-base font-semibold mb-2 sm:mb-3 block">
                     Testing Approach (Pendekatan Tes)
                   </Label>
                   <Select value={testingApproach} onValueChange={setTestingApproach}>
-                    <SelectTrigger className="w-full bg-background">
+                    <SelectTrigger className="w-full bg-background h-10 sm:h-11 text-sm sm:text-base">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="blackbox">Black Box</SelectItem>
-                      <SelectItem value="greybox">Grey Box</SelectItem>
-                      <SelectItem value="whitebox">White Box (Akses Penuh Kode/Sistem)</SelectItem>
+                      <SelectItem value="blackbox" className="text-sm sm:text-base">Black Box</SelectItem>
+                      <SelectItem value="greybox" className="text-sm sm:text-base">Grey Box</SelectItem>
+                      <SelectItem value="whitebox" className="text-sm sm:text-base">White Box (Akses Penuh Kode/Sistem)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 {/* Level of Tester */}
-                <div className="mb-6">
-                  <Label className="text-base font-semibold mb-3 block">
+                <div className="mb-4 sm:mb-6">
+                  <Label className="text-sm sm:text-base font-semibold mb-2 sm:mb-3 block">
                     Level of Tester (Level Penguji)
                   </Label>
                   <Select value={testerLevel} onValueChange={setTesterLevel}>
-                    <SelectTrigger className="w-full bg-background">
+                    <SelectTrigger className="w-full bg-background h-10 sm:h-11 text-sm sm:text-base">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="basic">Basic testers</SelectItem>
-                      <SelectItem value="intermediate">Intermediate testers</SelectItem>
-                      <SelectItem value="expert">Expert testers</SelectItem>
+                      <SelectItem value="basic" className="text-sm sm:text-base">Basic testers</SelectItem>
+                      <SelectItem value="intermediate" className="text-sm sm:text-base">Intermediate testers</SelectItem>
+                      <SelectItem value="expert" className="text-sm sm:text-base">Expert testers</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 {/* Number of Endpoints / Devices */}
                 {targetScope !== "server" && (
-                  <div className="mb-6">
+                  <div className="mb-4 sm:mb-6 animate-scale-in">
                     <div className="flex justify-between items-center mb-2">
-                      <Label className="text-base font-semibold">
+                      <Label className="text-xs sm:text-sm md:text-base font-semibold">
                         {targetScope === "network" 
                           ? "Jumlah Device pada Satu Segmen IP" 
                           : "Jumlah Halaman / Endpoint"
                         }
                       </Label>
-                      <span className="text-2xl font-bold text-primary">{endpoints[0]}</span>
+                      <span className="text-xl sm:text-2xl font-bold text-primary">{endpoints[0]}</span>
                     </div>
                     <Slider
                       value={endpoints}
@@ -286,10 +286,10 @@ const Index = () => {
                       min={10}
                       max={targetScope === "network" ? 255 : 500}
                       step={10}
-                      className={`my-4 ${testingApproach === "blackbox" && targetScope !== "network" ? "opacity-50 cursor-not-allowed" : ""}`}
+                      className={`my-3 sm:my-4 ${testingApproach === "blackbox" && targetScope !== "network" ? "opacity-50 cursor-not-allowed" : ""}`}
                       disabled={testingApproach === "blackbox" && targetScope !== "network"}
                     />
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       {targetScope === "network" ? (
                         "Rentang: 10 hingga 255 device (maksimal dalam satu segmen IP/24). Scanning: 255 device/hari/pentester. Manual Test: 20 device/hari/pentester."
                       ) : (
@@ -302,12 +302,12 @@ const Index = () => {
                 )}
 
                 {targetScope === "server" && (
-                  <div className="mb-6">
-                    <Label className="text-base font-semibold mb-3 block">
+                  <div className="mb-4 sm:mb-6 animate-scale-in">
+                    <Label className="text-sm sm:text-base font-semibold mb-2 sm:mb-3 block">
                       Jumlah Server
                     </Label>
-                    <div className="bg-secondary/30 rounded-lg p-4">
-                      <p className="text-sm">Default: <span className="font-bold text-primary">1 Server</span></p>
+                    <div className="bg-secondary/30 rounded-lg p-3 sm:p-4">
+                      <p className="text-xs sm:text-sm">Default: <span className="font-bold text-primary">1 Server</span></p>
                       <p className="text-xs text-muted-foreground mt-2">
                         White box: 1 hari scanning + 4 hari manual test<br />
                         Grey box: 2 hari scanning + 6 hari manual test<br />
@@ -318,12 +318,12 @@ const Index = () => {
                 )}
 
                 {/* Number of Pentesters */}
-                <div className="mb-6">
+                <div className="mb-4 sm:mb-6">
                   <div className="flex justify-between items-center mb-2">
-                    <Label className="text-base font-semibold">
+                    <Label className="text-xs sm:text-sm md:text-base font-semibold">
                       Jumlah Pentester
                     </Label>
-                    <span className="text-2xl font-bold text-primary">{pentesters[0]}</span>
+                    <span className="text-xl sm:text-2xl font-bold text-primary">{pentesters[0]}</span>
                   </div>
                   <Slider
                     value={pentesters}
@@ -331,20 +331,20 @@ const Index = () => {
                     min={1}
                     max={10}
                     step={1}
-                    className="my-4"
+                    className="my-3 sm:my-4"
                   />
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-xs sm:text-sm text-muted-foreground">
                     Jumlah pentester yang bekerja secara paralel pada fase testing.
                   </p>
                 </div>
 
                 {/* Number of Retests */}
-                <div className="mb-6">
+                <div className="mb-4 sm:mb-6">
                   <div className="flex justify-between items-center mb-2">
-                    <Label className="text-base font-semibold">
+                    <Label className="text-xs sm:text-sm md:text-base font-semibold">
                       Jumlah Retest (Pengujian Ulang)
                     </Label>
-                    <span className="text-2xl font-bold text-primary">{retests[0]}</span>
+                    <span className="text-xl sm:text-2xl font-bold text-primary">{retests[0]}</span>
                   </div>
                   <Slider
                     value={retests}
@@ -352,9 +352,9 @@ const Index = () => {
                     min={0}
                     max={5}
                     step={1}
-                    className="my-4"
+                    className="my-3 sm:my-4"
                   />
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-xs sm:text-sm text-muted-foreground">
                     Setiap retest mencakup: Patching (5 hari) + Retest + Generate Report.
                   </p>
                 </div>
@@ -363,105 +363,105 @@ const Index = () => {
           </div>
 
           {/* Right Column - Cost Estimation */}
-          <div className="space-y-6">
-            <Card className="bg-[hsl(var(--calculator-section))] border-border h-full">
-              <CardContent className="pt-6">
-                <h2 className="text-2xl font-bold text-primary mb-6">2. Hasil Estimasi</h2>
+          <div className="space-y-4 sm:space-y-6 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+            <Card className="bg-[hsl(var(--calculator-section))] border-border lg:h-full transition-all duration-300 hover:shadow-lg sticky top-4">
+              <CardContent className="pt-4 sm:pt-6 px-4 sm:px-6">
+                <h2 className="text-xl sm:text-2xl font-bold text-primary mb-4 sm:mb-6">2. Hasil Estimasi</h2>
 
-                <div className="bg-secondary/30 rounded-lg p-5 mb-6">
-                  <h3 className="font-bold text-lg mb-4">Detail Iterasi & Timeline</h3>
+                <div className="bg-secondary/30 rounded-lg p-3 sm:p-4 md:p-5 mb-4 sm:mb-6">
+                  <h3 className="font-bold text-base sm:text-lg mb-3 sm:mb-4">Detail Iterasi & Timeline</h3>
 
-                  <div className="space-y-3">
-                    <div className="border-b border-border pb-3">
-                      <h4 className="font-semibold text-sm mb-2">FASE INITIAL TEST</h4>
-                      <div className="space-y-2 ml-2">
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm">Kickoff:</span>
-                          <span className="text-sm font-medium">{kickoffDays} hari</span>
+                  <div className="space-y-2 sm:space-y-3">
+                    <div className="border-b border-border pb-2 sm:pb-3">
+                      <h4 className="font-semibold text-xs sm:text-sm mb-2">FASE INITIAL TEST</h4>
+                      <div className="space-y-1.5 sm:space-y-2 ml-1 sm:ml-2">
+                        <div className="flex justify-between items-center gap-2">
+                          <span className="text-xs sm:text-sm">Kickoff:</span>
+                          <span className="text-xs sm:text-sm font-medium">{kickoffDays} hari</span>
                         </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm">Initial Test (Scanning + Manual) ({pentesters[0]} pentester):</span>
-                          <span className="text-sm font-medium">{initialTestCalendarDays} hari kerja = {initialTestManDays} man-days</span>
+                        <div className="flex justify-between items-center gap-2">
+                          <span className="text-xs sm:text-sm">Initial Test ({pentesters[0]} pentester):</span>
+                          <span className="text-xs sm:text-sm font-medium whitespace-nowrap">{initialTestCalendarDays} hari = {initialTestManDays} man-days</span>
                         </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm text-muted-foreground ml-4">• Scanning:</span>
-                          <span className="text-sm text-muted-foreground">{scanningDaysPerPentester} hari × {pentesters[0]} = {scanningManDays} man-days</span>
+                        <div className="flex justify-between items-center gap-2">
+                          <span className="text-xs sm:text-sm text-muted-foreground ml-2 sm:ml-4">• Scanning:</span>
+                          <span className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">{scanningDaysPerPentester} × {pentesters[0]} = {scanningManDays} man-days</span>
                         </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm text-muted-foreground ml-4">• Manual Testing:</span>
-                          <span className="text-sm text-muted-foreground">{manualTestingManDays} man-days ÷ {pentesters[0]} = {manualTestingCalendarDays} hari kerja</span>
+                        <div className="flex justify-between items-center gap-2">
+                          <span className="text-xs sm:text-sm text-muted-foreground ml-2 sm:ml-4">• Manual Testing:</span>
+                          <span className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">{manualTestingManDays} ÷ {pentesters[0]} = {manualTestingCalendarDays} hari</span>
                         </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm">Generate Initial Report:</span>
-                          <span className="text-sm font-medium">{generateInitialReportDays} hari ({targetCount} target{targetCount > 1 ? 's' : ''})</span>
+                        <div className="flex justify-between items-center gap-2">
+                          <span className="text-xs sm:text-sm">Generate Report:</span>
+                          <span className="text-xs sm:text-sm font-medium">{generateInitialReportDays} hari</span>
                         </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm">Present:</span>
-                          <span className="text-sm font-medium">{presentDays} hari</span>
+                        <div className="flex justify-between items-center gap-2">
+                          <span className="text-xs sm:text-sm">Present:</span>
+                          <span className="text-xs sm:text-sm font-medium">{presentDays} hari</span>
                         </div>
-                        <div className="flex justify-between items-center font-semibold mt-2 pt-2 border-t border-border/50">
-                          <span className="text-sm">Total Man-days Initial:</span>
-                          <span className="text-sm">{initialPhaseManDays} hari</span>
+                        <div className="flex justify-between items-center font-semibold mt-2 pt-2 border-t border-border/50 gap-2">
+                          <span className="text-xs sm:text-sm">Total Man-days:</span>
+                          <span className="text-xs sm:text-sm">{initialPhaseManDays} hari</span>
                         </div>
                       </div>
                     </div>
 
                     {retests[0] > 0 && (
-                      <div className="border-b border-border pb-3">
-                        <h4 className="font-semibold text-sm mb-2">FASE RETEST ({retests[0]}x)</h4>
-                        <div className="space-y-2 ml-2">
-                          <div className="flex justify-between items-center">
-                            <span className="text-sm">Patching:</span>
-                            <span className="text-sm font-medium">{patchingDays} hari</span>
+                      <div className="border-b border-border pb-2 sm:pb-3 animate-scale-in">
+                        <h4 className="font-semibold text-xs sm:text-sm mb-2">FASE RETEST ({retests[0]}x)</h4>
+                        <div className="space-y-1.5 sm:space-y-2 ml-1 sm:ml-2">
+                          <div className="flex justify-between items-center gap-2">
+                            <span className="text-xs sm:text-sm">Patching:</span>
+                            <span className="text-xs sm:text-sm font-medium">{patchingDays} hari</span>
                           </div>
-                          <div className="flex justify-between items-center">
-                            <span className="text-sm">Retest ({pentesters[0]} pentester):</span>
-                            <span className="text-sm font-medium">{retestCalendarDays} hari kerja = {retestManDays} man-days</span>
+                          <div className="flex justify-between items-center gap-2">
+                            <span className="text-xs sm:text-sm">Retest ({pentesters[0]} pentester):</span>
+                            <span className="text-xs sm:text-sm font-medium whitespace-nowrap">{retestCalendarDays} hari = {retestManDays} man-days</span>
                           </div>
-                          <div className="flex justify-between items-center">
-                            <span className="text-sm">Generate Retest Report:</span>
-                            <span className="text-sm font-medium">{generateRetestReportDays} hari</span>
+                          <div className="flex justify-between items-center gap-2">
+                            <span className="text-xs sm:text-sm">Generate Report:</span>
+                            <span className="text-xs sm:text-sm font-medium">{generateRetestReportDays} hari</span>
                           </div>
-                          <div className="flex justify-between items-center font-semibold mt-2 pt-2 border-t border-border/50">
-                            <span className="text-sm">Man-days per Retest:</span>
-                            <span className="text-sm">{retestPhaseManDays} hari</span>
+                          <div className="flex justify-between items-center font-semibold mt-2 pt-2 border-t border-border/50 gap-2">
+                            <span className="text-xs sm:text-sm">Per Retest:</span>
+                            <span className="text-xs sm:text-sm">{retestPhaseManDays} hari</span>
                           </div>
-                          <div className="flex justify-between items-center font-semibold">
-                            <span className="text-sm">Total Man-days Retest:</span>
-                            <span className="text-sm">{retestPhaseManDays * retests[0]} hari</span>
+                          <div className="flex justify-between items-center font-semibold gap-2">
+                            <span className="text-xs sm:text-sm">Total Retest:</span>
+                            <span className="text-xs sm:text-sm">{retestPhaseManDays * retests[0]} hari</span>
                           </div>
                         </div>
                       </div>
                     )}
 
                     <div className="pt-2">
-                      <div className="flex justify-between items-center mb-3">
-                        <span className="text-base font-bold">Durasi Pengerjaan:</span>
-                        <span className="text-xl font-bold text-primary">{totalDuration} hari kerja</span>
+                      <div className="flex justify-between items-center mb-2 sm:mb-3 gap-2">
+                        <span className="text-sm sm:text-base font-bold">Durasi Pengerjaan:</span>
+                        <span className="text-lg sm:text-xl font-bold text-primary whitespace-nowrap">{totalDuration} hari</span>
                       </div>
-                      <div className="flex justify-between items-center mb-3">
-                        <span className="text-base font-bold">TOTAL MAN-DAY Dibayarkan ({pentesters[0]} pentester):</span>
-                        <span className="text-xl font-bold text-primary">{totalManDays} hari kerja</span>
+                      <div className="flex justify-between items-center mb-2 sm:mb-3 gap-2">
+                        <span className="text-sm sm:text-base font-bold">TOTAL MAN-DAY ({pentesters[0]} pentester):</span>
+                        <span className="text-lg sm:text-xl font-bold text-primary whitespace-nowrap">{totalManDays} hari</span>
                       </div>
-                      <div className="flex justify-between items-center text-sm text-muted-foreground">
+                      <div className="flex justify-between items-center text-xs sm:text-sm text-muted-foreground gap-2">
                         <span>Tarif Man-day:</span>
-                        <span>{formatCurrency(MANDAY_RATE)}</span>
+                        <span className="whitespace-nowrap">{formatCurrency(MANDAY_RATE)}</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Total Estimate */}
-                <div className="border-t-2 border-primary pt-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xl font-bold text-primary">TOTAL<br />ESTIMASI</span>
-                    <span className="text-4xl font-bold text-primary">
+                <div className="border-t-2 border-primary pt-3 sm:pt-4 animate-scale-in">
+                  <div className="flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-4">
+                    <span className="text-base sm:text-xl font-bold text-primary">TOTAL ESTIMASI</span>
+                    <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary whitespace-nowrap">
                       {formatCurrency(totalEstimate)}
                     </span>
                   </div>
                 </div>
 
-                <div className="mt-6 p-4 bg-muted/30 rounded-lg">
+                <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-muted/30 rounded-lg">
                   <p className="text-xs text-muted-foreground">
                     * Estimasi ini hanya simulasi dan tidak mengikat. Harga final dapat bervariasi tergantung pada hasil diskusi SOW (Scope of Work).
                   </p>
