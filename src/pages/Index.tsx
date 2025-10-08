@@ -385,7 +385,7 @@ const Index = () => {
                         </div>
                         <div className="flex justify-between items-center gap-2">
                           <span className="text-xs sm:text-sm text-muted-foreground ml-2 sm:ml-4">• Scanning:</span>
-                          <span className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">{scanningDaysPerPentester} × {pentesters[0]} = {scanningManDays} man-days</span>
+                          <span className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">{scanningDaysPerPentester} × {pentesters[0]} = {scanningManDays} hari</span>
                         </div>
                         <div className="flex justify-between items-center gap-2">
                           <span className="text-xs sm:text-sm text-muted-foreground ml-2 sm:ml-4">• Manual Testing:</span>
