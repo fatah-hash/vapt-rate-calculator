@@ -35,34 +35,20 @@ const Index = () => {
   let effectiveEndpoints: number;
 
   if (targetScope === "network") {
-    // Determine size category based on device count
     const deviceCount = endpoints[0];
-    let sizeCategory: "kecil" | "sedang" | "besar";
     
-    if (deviceCount <= 50) {
-      sizeCategory = "kecil";
-    } else if (deviceCount <= 150) {
-      sizeCategory = "sedang";
-    } else {
-      sizeCategory = "besar";
-    }
-
-    // Man-days table for network testing
-    const networkManDaysTable = {
-      blackbox: { kecil: 9, sedang: 16, besar: 25 },
-      greybox: { kecil: 7, sedang: 12, besar: 18 },
-      whitebox: { kecil: 4, sedang: 8, besar: 13 }
-    };
-
-    const totalManDays = networkManDaysTable[testingApproach as keyof typeof networkManDaysTable][sizeCategory];
+    // Network testing formula:
+    // Scanning: 255 devices per day per pentester
+    // Manual testing: 20 devices per day per pentester
     
-    // Split: 1/4 for scanning, 3/4 for manual testing
-    scanningManDays = Math.ceil(totalManDays * 0.25);
-    manualTestingManDays = Math.ceil(totalManDays * 0.75);
+    // Calculate scanning days
+    scanningDaysPerPentester = Math.ceil(deviceCount / 255);
+    scanningManDays = scanningDaysPerPentester * pentesters[0];
     
-    // Calculate calendar days
-    scanningDaysPerPentester = Math.ceil(scanningManDays / pentesters[0]);
-    manualTestingCalendarDays = Math.ceil(manualTestingManDays / pentesters[0]);
+    // Calculate manual testing days
+    const manualTestingDaysBase = Math.ceil(deviceCount / 20);
+    manualTestingManDays = manualTestingDaysBase;
+    manualTestingCalendarDays = Math.ceil(manualTestingDaysBase / pentesters[0]);
     
     effectiveEndpoints = deviceCount;
   } else {
