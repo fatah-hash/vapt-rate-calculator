@@ -37,16 +37,28 @@ const Index = () => {
   if (targetScope === "network") {
     const deviceCount = endpoints[0];
     
-    // Network testing formula:
-    // Scanning: 255 devices per day per pentester
-    // Manual testing: 20 devices per day per pentester
+    // Network testing formula varies by approach:
+    // Scanning: 255 devices per day per pentester (same for all)
+    // Manual testing varies:
+    // - Blackbox: 10 devices per day per pentester
+    // - Greybox: 20 devices per day per pentester
+    // - Whitebox: 30 devices per day per pentester
     
     // Calculate scanning days
     scanningDaysPerPentester = Math.ceil(deviceCount / 255);
     scanningManDays = scanningDaysPerPentester * pentesters[0];
     
-    // Calculate manual testing days
-    const manualTestingDaysBase = Math.ceil(deviceCount / 20);
+    // Calculate manual testing days based on approach
+    let devicesPerDay: number;
+    if (testingApproach === "blackbox") {
+      devicesPerDay = 10;
+    } else if (testingApproach === "greybox") {
+      devicesPerDay = 20;
+    } else { // whitebox
+      devicesPerDay = 30;
+    }
+    
+    const manualTestingDaysBase = Math.ceil(deviceCount / devicesPerDay);
     manualTestingManDays = manualTestingDaysBase;
     manualTestingCalendarDays = Math.ceil(manualTestingDaysBase / pentesters[0]);
     
@@ -291,7 +303,11 @@ const Index = () => {
                     />
                     <p className="text-xs sm:text-sm text-muted-foreground">
                       {targetScope === "network" ? (
-                        "Rentang: 10 hingga 255 device (maksimal dalam satu segmen IP/24). Scanning: 255 device/hari/pentester. Manual Test: 20 device/hari/pentester."
+                        `Rentang: 10 hingga 255 device (maksimal dalam satu segmen IP/24). Scanning: 255 device/hari/pentester. Manual Test: ${
+                          testingApproach === "blackbox" ? "10" : testingApproach === "greybox" ? "20" : "30"
+                        } device/hari/pentester (${
+                          testingApproach === "blackbox" ? "Black Box" : testingApproach === "greybox" ? "Grey Box" : "White Box"
+                        }).`
                       ) : (
                         testingApproach === "blackbox" 
                           ? "Untuk Black Box testing, jumlah endpoint tidak mempengaruhi kalkulasi (fixed 10 hari: 3 scanning + 7 manual test)."
