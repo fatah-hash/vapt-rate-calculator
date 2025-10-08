@@ -195,7 +195,7 @@ const Index = () => {
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Left Column - Project Details */}
           <div className="space-y-6">
-            <Card className="bg-[hsl(var(--calculator-section))] border-border">
+            <Card className="bg-[hsl(var(--calculator-section))] border-border h-full">
               <CardContent className="pt-6">
                 <h2 className="text-2xl font-bold text-primary mb-6">1. Detail Proyek</h2>
 
@@ -364,7 +364,7 @@ const Index = () => {
 
           {/* Right Column - Cost Estimation */}
           <div className="space-y-6">
-            <Card className="bg-[hsl(var(--calculator-section))] border-border">
+            <Card className="bg-[hsl(var(--calculator-section))] border-border h-full">
               <CardContent className="pt-6">
                 <h2 className="text-2xl font-bold text-primary mb-6">2. Hasil Estimasi</h2>
 
