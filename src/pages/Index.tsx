@@ -261,18 +261,16 @@ const Index = () => {
                     min={10}
                     max={targetScope === "network" ? 255 : 500}
                     step={10}
-                    className={`my-4 ${testingApproach === "blackbox" ? "opacity-50 cursor-not-allowed" : ""}`}
-                    disabled={testingApproach === "blackbox"}
+                    className={`my-4 ${testingApproach === "blackbox" && targetScope !== "network" ? "opacity-50 cursor-not-allowed" : ""}`}
+                    disabled={testingApproach === "blackbox" && targetScope !== "network"}
                   />
                   <p className="text-sm text-muted-foreground">
                     {targetScope === "network" ? (
-                      testingApproach === "blackbox"
-                        ? "Untuk Black Box testing, jumlah device tidak mempengaruhi kalkulasi (fixed 10 hari: 3 scanning + 7 manual test)."
-                        : "Rentang: 10 hingga 255 device (maksimal dalam satu segmen IP/24). Scanning: 100 device/hari. Manual Test: 25 device/hari."
+                      "Rentang: 10 hingga 255 device (maksimal dalam satu segmen IP/24). Scanning: 255 device/hari/pentester. Manual Test: 20 device/hari/pentester."
                     ) : (
                       testingApproach === "blackbox" 
                         ? "Untuk Black Box testing, jumlah endpoint tidak mempengaruhi kalkulasi (fixed 10 hari: 3 scanning + 7 manual test)."
-                        : "Rentang: 10 hingga 500 endpoint. Scanning: 100 endpoint/hari. Manual Test: 25 endpoint/hari."
+                        : "Rentang: 10 hingga 500 endpoint. Scanning: 100 endpoint/hari/pentester. Manual Test: 25 endpoint/hari/pentester."
                     )}
                   </p>
                 </div>
