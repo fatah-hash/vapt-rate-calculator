@@ -379,9 +379,9 @@ const Index = () => {
                           <span className="text-xs sm:text-sm">Kickoff:</span>
                           <span className="text-xs sm:text-sm font-medium">{kickoffDays} hari</span>
                         </div>
-                        <div>
-                          <div className="text-xs sm:text-sm mb-1">Initial Test ({pentesters[0]} pentester):</div>
-                          <div className="text-xs sm:text-sm font-medium ml-2 sm:ml-4">{initialTestCalendarDays} hari × {pentesters[0]} Pentester = {initialTestManDays} hari</div>
+                        <div className="flex justify-between items-center gap-2">
+                          <span className="text-xs sm:text-sm">Initial Test ({pentesters[0]} pentester):</span>
+                          <span className="text-xs sm:text-sm font-medium whitespace-nowrap">{initialTestCalendarDays} hari × {pentesters[0]} Pentester = {initialTestManDays} hari</span>
                         </div>
                         <div className="flex justify-between items-center gap-2">
                           <span className="text-xs sm:text-sm text-muted-foreground ml-2 sm:ml-4">• Scanning:</span>
@@ -414,9 +414,9 @@ const Index = () => {
                             <span className="text-xs sm:text-sm">Patching:</span>
                             <span className="text-xs sm:text-sm font-medium">{patchingDays} hari</span>
                           </div>
-                          <div>
-                            <div className="text-xs sm:text-sm mb-1">Retest ({pentesters[0]} pentester):</div>
-                            <div className="text-xs sm:text-sm font-medium ml-2 sm:ml-4">{retestCalendarDays} hari × {pentesters[0]} pentester = {retestManDays} hari</div>
+                          <div className="flex justify-between items-center gap-2">
+                            <span className="text-xs sm:text-sm">Retest ({pentesters[0]} pentester):</span>
+                            <span className="text-xs sm:text-sm font-medium whitespace-nowrap">{retestCalendarDays} hari × {pentesters[0]} pentester = {retestManDays} hari</span>
                           </div>
                           <div className="flex justify-between items-center gap-2">
                             <span className="text-xs sm:text-sm">Generate Report:</span>
